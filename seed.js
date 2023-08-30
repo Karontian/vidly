@@ -1,5 +1,10 @@
 const { Genre } = require("./models/genre");
 const { Movie } = require("./models/movie");
+const { User } = require("./models/user");
+
+const dataUsers = [ { name: "Seed User", email: "seed@email.com", password: "password", }, ];
+
+
 const mongoose = require("mongoose");
 const config = require("config");
 
@@ -43,6 +48,8 @@ async function seed() {
 
   await Movie.deleteMany({});
   await Genre.deleteMany({});
+  await User.deleteMany({});
+
 
   for (let genre of data) {
     const { _id: genreId } = await new Genre({ name: genre.name }).save();
@@ -52,6 +59,10 @@ async function seed() {
     }));
     await Movie.insertMany(movies);
   }
+  for (let user of dataUsers) 
+  { await new User({ name: user.name, email: user.email, password: user.password, })
+      .save(); }
+
 
   mongoose.disconnect();
 
